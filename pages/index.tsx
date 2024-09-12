@@ -21,20 +21,17 @@ export default function Home() {
   const [result, setResult] = useState("");
 
 
-  const manejarEnvio = (e: any) => {
+ const manejarEnvio = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.target;
-    const signo = form.elements.signo.value;
-    const periodo = form.elements.periodo.value;
-
-    fetchData(signo, periodo);
+    const signo = e.currentTarget.elements.namedItem("signo") as HTMLSelectElement;
+    const periodo = e.currentTarget.elements.namedItem("periodo") as HTMLSelectElement;
+    fetchData(signo.value, periodo.value);
   };
+
 
     const fetchData = async (signo: string, periodo: string) => {
       setLoading(true);
-      const apiKey = 'AIzaSyDpE8pqTxXddV6guUpL1C056CO9IY34nH0';  // Reemplaza con tu clave API
-
-      const apiURL = 'https://api.openai.com/v1/chat/completions';
+      const apiKey = 'AIzaSyDpE8pqTxXddV6guUpL1C056CO9IY34nH0';
 
       try {
         const response = await fetch(
@@ -71,13 +68,13 @@ export default function Home() {
       <label htmlFor="signo">
         Signo:
         <select name="signo" id="signo" className="text-black rounded-md bg-gray-100 p-2 w-full">
-          {signos.map((signo) => (<option value={signo.value}>{signo.name}</option>))}
+          {signos.map((signo) => (<option key={signo.value} value={signo.value}>{signo.name}</option>))}
         </select>
       </label>
       <label htmlFor="periodo">
         Sobre:
         <select name="periodo" id="periodo" className="text-black rounded-md bg-gray-100 p-2 w-full">
-          {periodos.map((periodo) => (<option value={periodo.value}>{periodo.name}</option>))}
+          {periodos.map((periodo) => (<option key={periodo.value} value={periodo.value}>{periodo.name}</option>))}
         </select>
       </label>
       <button type="submit" className="rounded-md p-2 w-full bg-pink-500 text-white mt-4">{loading ? "Cargando..." : "Aceptar"}</button>
